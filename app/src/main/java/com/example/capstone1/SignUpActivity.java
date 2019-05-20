@@ -22,18 +22,19 @@ public class SignUpActivity extends AppCompatActivity {
 
 
   private Button btnSignup;
-  private TextView Phone;//
-  private TextView Partner;//
-  private TextView Password;//
-  private RadioGroup rg;//
-  private int id;//
+  private TextView Phone;
+  private TextView Partner;
+  private TextView Password;
+  private RadioGroup rg;
+  private int id;
   private RadioButton rb;
+
 
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference databaseReference = database.getReference("users");
 
-
+    /*
     private ValueEventListener checkRegister = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -52,6 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
         public void onCancelled(@NonNull DatabaseError databaseError) {
 
         }
+
     };
 
 
@@ -68,16 +70,27 @@ public class SignUpActivity extends AppCompatActivity {
             databaseReference.child(Phone.getText().toString()).child("분류").setValue(rb.getText().toString());
             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
     }
-
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        btnSignup = findViewById(R.id.SignUpButton);
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseReference.addListenerForSingleValueEvent(checkRegister);
+                //databaseReference.addListenerForSingleValueEvent(checkRegister);
+                Phone = (TextView)findViewById(R.id.PhoneID);
+                Partner = (TextView)findViewById(R.id.PartnerID);
+                Password = (TextView)findViewById(R.id.PW1);
+                rg = (RadioGroup)findViewById(R.id.choice);
+                id = (int)rg.getCheckedRadioButtonId();
+                rb = (RadioButton)findViewById(id);
+                databaseReference.child(Phone.getText().toString()).child("비밀번호").setValue(Password.getText().toString());
+                databaseReference.child(Phone.getText().toString()).child("파트너").setValue(Partner.getText().toString());
+                databaseReference.child(Phone.getText().toString()).child("분류").setValue(rb.getText().toString());
+                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
             }
         });
 
