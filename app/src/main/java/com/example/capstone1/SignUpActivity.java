@@ -26,9 +26,8 @@ public class SignUpActivity extends AppCompatActivity {
   private TextView Phone;
   private TextView Partner;
   private TextView Password;
-  private RadioGroup rg;
   private RadioButton rb;
-
+  private RadioGroup rg;
 
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -40,11 +39,27 @@ public class SignUpActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
             while(child.hasNext()) {
+                if (Phone.getText().toString().length() == 0) {
+                    Toast.makeText(getApplicationContext(), "번호를 입력해주세요", Toast.LENGTH_LONG).show();
+                    databaseReference.removeEventListener(this);
+                    return;
+                }
                 if (Phone.getText().toString().equals(child.next().getKey())) {
                     Toast.makeText(getApplicationContext(),"가입된 번호입니다",Toast.LENGTH_LONG).show();
                     databaseReference.removeEventListener(this);
                     return;
                 }
+                if (Password.getText().toString().length() == 0) {
+                    Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요", Toast.LENGTH_LONG).show();
+                    databaseReference.removeEventListener(this);
+                    return;
+                }
+                if (Password.getText().toString().length() == 0) {
+                    Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요", Toast.LENGTH_LONG).show();
+                    databaseReference.removeEventListener(this);
+                    return;
+                }
+
             }
             makeNewId();
         }
@@ -58,7 +73,8 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     void makeNewId() {
-            //databaseReference.child(Phone.getText().toString()).child("분류").setValue(rb.getText().toString());
+            final String value = ((RadioButton)findViewById(rg.getCheckedRadioButtonId() )).getText().toString();
+            databaseReference.child(Phone.getText().toString()).child("분류").setValue(value);
             databaseReference.child(Phone.getText().toString()).child("비밀번호").setValue(Password.getText().toString());
             databaseReference.child(Phone.getText().toString()).child("파트너").setValue(Partner.getText().toString());
 
@@ -79,8 +95,8 @@ public class SignUpActivity extends AppCompatActivity {
         Phone = (TextView)findViewById(R.id.PhoneID);
         Partner = (TextView)findViewById(R.id.PartnerID);
         Password = (TextView)findViewById(R.id.PW1);
-        //rg = (RadioGroup)findViewById(R.id.choice);
-        //rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
+        rg = (RadioGroup) findViewById(R.id.choice);
+        rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
