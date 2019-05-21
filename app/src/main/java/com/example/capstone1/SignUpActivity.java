@@ -1,5 +1,6 @@
 package com.example.capstone1;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +27,6 @@ public class SignUpActivity extends AppCompatActivity {
   private TextView Partner;
   private TextView Password;
   private RadioGroup rg;
-  private int id;
   private RadioButton rb;
 
 
@@ -34,7 +34,7 @@ public class SignUpActivity extends AppCompatActivity {
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference databaseReference = database.getReference("users");
 
-    /*
+
     private ValueEventListener checkRegister = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -58,39 +58,34 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     void makeNewId() {
-           btnSignup = (Button)findViewById(R.id.SignUpButton);
-           Phone = (TextView)findViewById(R.id.PhoneID);
-           Partner = (TextView)findViewById(R.id.PartnerID);
-           Password = (TextView)findViewById(R.id.PW1);
-           rg = (RadioGroup)findViewById(R.id.choice);
-           id = (int)rg.getCheckedRadioButtonId();
-           rb = (RadioButton)findViewById(id);
+            //databaseReference.child(Phone.getText().toString()).child("분류").setValue(rb.getText().toString());
             databaseReference.child(Phone.getText().toString()).child("비밀번호").setValue(Password.getText().toString());
             databaseReference.child(Phone.getText().toString()).child("파트너").setValue(Partner.getText().toString());
-            databaseReference.child(Phone.getText().toString()).child("분류").setValue(rb.getText().toString());
+
             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+              intent.putExtra("PhoneNumber",Phone.getText().toString());
+              startActivity(intent);
+
     }
-    */
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         btnSignup = findViewById(R.id.SignUpButton);
+        btnSignup = (Button)findViewById(R.id.SignUpButton);
+        Phone = (TextView)findViewById(R.id.PhoneID);
+        Partner = (TextView)findViewById(R.id.PartnerID);
+        Password = (TextView)findViewById(R.id.PW1);
+        //rg = (RadioGroup)findViewById(R.id.choice);
+        //rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //databaseReference.addListenerForSingleValueEvent(checkRegister);
-                Phone = (TextView)findViewById(R.id.PhoneID);
-                Partner = (TextView)findViewById(R.id.PartnerID);
-                Password = (TextView)findViewById(R.id.PW1);
-                rg = (RadioGroup)findViewById(R.id.choice);
-                id = (int)rg.getCheckedRadioButtonId();
-                rb = (RadioButton)findViewById(id);
-                databaseReference.child(Phone.getText().toString()).child("비밀번호").setValue(Password.getText().toString());
-                databaseReference.child(Phone.getText().toString()).child("파트너").setValue(Partner.getText().toString());
-                databaseReference.child(Phone.getText().toString()).child("분류").setValue(rb.getText().toString());
-                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                databaseReference.addListenerForSingleValueEvent(checkRegister);
+
             }
         });
 
