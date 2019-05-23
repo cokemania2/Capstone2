@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -28,7 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
   private TextView Password;
   private RadioButton rb;
   private RadioGroup rg;
-
+  private String HashPassword;
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference databaseReference = database.getReference("users");
@@ -73,17 +75,39 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     void makeNewId() {
+
             final String value = ((RadioButton)findViewById(rg.getCheckedRadioButtonId() )).getText().toString();
+            User user = new User(Phone.getText().toString(),Partner.getText().toString(),HashPassword);
+            databaseReference.child(Phone.getText().toString()).setValue(user);
+            /*
             databaseReference.child(Phone.getText().toString()).child("분류").setValue(value);
             databaseReference.child(Phone.getText().toString()).child("비밀번호").setValue(Password.getText().toString());
             databaseReference.child(Phone.getText().toString()).child("파트너").setValue(Partner.getText().toString());
-
+            */
             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
               intent.putExtra("PhoneNumber",Phone.getText().toString());
               startActivity(intent);
 
     }
+    public String testMD5(String str){
+        String MD5 = "";
+        try{
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(str.getBytes());
+            byte byteData[] = md.digest();
+            StringBuffer sb = new StringBuffer();
+            for(int i = 0 ; i < byteData.length ; i++){
+                sb.append(Integer.toString((byteData[i]&0xff) + 0x100, 16).substring(1));
+            }
+            MD5 = sb.toString();
+        }catch(NoSuchAlgorithmException e){
+            e.printStackTrace();
+            MD5 = null;
+        }
+        return MD5;
+    }
+
 
 
     @Override
@@ -95,6 +119,7 @@ public class SignUpActivity extends AppCompatActivity {
         Phone = (TextView)findViewById(R.id.PhoneID);
         Partner = (TextView)findViewById(R.id.PartnerID);
         Password = (TextView)findViewById(R.id.PW1);
+        HashPassword = testMD5(Password.getText().toString());
         rg = (RadioGroup) findViewById(R.id.choice);
         rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
         btnSignup.setOnClickListener(new View.OnClickListener() {
