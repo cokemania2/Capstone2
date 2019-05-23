@@ -16,8 +16,8 @@
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="302dp"
-        android:layout_height="57dp"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="32dp"
         android:background="@color/colorPrimaryDark"
         android:text="학생관리"

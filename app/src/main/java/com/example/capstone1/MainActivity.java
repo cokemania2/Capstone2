@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         button6.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),ManagementActivity.class);
+                Intent intent = new Intent(getApplicationContext(),subActivity.class);
                 intent.putExtra("name","용돈관리");
                 startActivity(intent);
 
