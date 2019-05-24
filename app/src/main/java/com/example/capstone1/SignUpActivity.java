@@ -75,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     void makeNewId() {
-
+            HashPassword = testMD5(Password.getText().toString());
             final String value = ((RadioButton)findViewById(rg.getCheckedRadioButtonId() )).getText().toString();
             User user = new User(Phone.getText().toString(),Partner.getText().toString(),HashPassword);
             databaseReference.child(Phone.getText().toString()).setValue(user);
@@ -119,7 +119,7 @@ public class SignUpActivity extends AppCompatActivity {
         Phone = (TextView)findViewById(R.id.PhoneID);
         Partner = (TextView)findViewById(R.id.PartnerID);
         Password = (TextView)findViewById(R.id.PW1);
-        HashPassword = testMD5(Password.getText().toString());
+
         rg = (RadioGroup) findViewById(R.id.choice);
         rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
         btnSignup.setOnClickListener(new View.OnClickListener() {

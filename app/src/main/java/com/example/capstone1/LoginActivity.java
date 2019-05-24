@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 
 import android.content.Intent;
@@ -50,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
     */
     private TextView Phone;
     private TextView Password;
+    private String HPassword;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,22 +89,22 @@ public class LoginActivity extends AppCompatActivity {
 
                 Phone = (TextView)findViewById(R.id.userPhone);
                 Password = (TextView)findViewById(R.id.userPassword);
+                HPassword = testMD5(Password.getText().toString());
 
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
-                        while (child.hasNext()) {
-                            if (child.next().getKey().equals(Phone.getText().toString())) {
-                                Toast.makeText(getApplicationContext(), "로그인!", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                                startActivity(intent);
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(), "존재하지 않는 아이디입니다.", Toast.LENGTH_LONG).show();
+                        User user = dataSnapshot.child(Phone.getText().toString()).getValue(User.class);
+                        if (user.getPassword().equals(HPassword)) {
+                            Toast.makeText(getApplicationContext(), "로그인!", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 확인하세요.", Toast.LENGTH_LONG).show();
                             }
                         }
-                    }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -120,5 +124,24 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+    }
+    public String testMD5(String str){
+        String MD5 = "";
+        try{
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(str.getBytes());
+            byte byteData[] = md.digest();
+            StringBuffer sb = new StringBuffer();
+            for(int i = 0 ; i < byteData.length ; i++){
+                sb.append(Integer.toString((byteData[i]&0xff) + 0x100, 16).substring(1));
+            }
+            MD5 = sb.toString();
+        }catch(NoSuchAlgorithmException e){
+            e.printStackTrace();
+            MD5 = null;
+        }
+        return MD5;
     }
 }
