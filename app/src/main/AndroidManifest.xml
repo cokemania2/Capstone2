@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.capstone1">
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -9,13 +10,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+
         <activity android:name=".MenuActivity">
-            android:theme="@style/Theme.AppCompat.Dialog">
         </activity>
         <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".ManagementActivity">
-            android:theme="@style/Theme.AppCompat.Dialog">
-            g</activity>
+        <activity android:name=".ManagementActivity"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,5 +28,4 @@
         <activity android:name=".MainActivity">
         </activity>
     </application>
-    //sf
 </manifest>
