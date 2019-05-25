@@ -85,8 +85,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
                 Phone = (TextView)findViewById(R.id.userPhone);
                 Password = (TextView)findViewById(R.id.userPassword);
                 HPassword = testMD5(Password.getText().toString());
@@ -97,9 +95,20 @@ public class LoginActivity extends AppCompatActivity {
                         Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
                         User user = dataSnapshot.child(Phone.getText().toString()).getValue(User.class);
                         if (user.getPassword().equals(HPassword)) {
-                            Toast.makeText(getApplicationContext(), "로그인!", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                            startActivity(intent);
+                            if (user.getClassification().equals("부모")) {
+                                Toast.makeText(getApplicationContext(), "로그인!", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.putExtra("Name",user.getName());
+                                intent.putExtra("PName",user.getPName());
+                                startActivity(intent);
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(), "로그인!", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+                                intent.putExtra("Name",user.getName());
+                                intent.putExtra("PName",user.getPName());
+                                startActivity(intent);
+                            }
                         }
                         else {
                             Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 확인하세요.", Toast.LENGTH_LONG).show();
