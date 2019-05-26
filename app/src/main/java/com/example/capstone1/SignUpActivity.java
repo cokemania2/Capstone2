@@ -25,10 +25,13 @@ public class SignUpActivity extends AppCompatActivity {
 
 
   private Button btnSignup;
+  private TextView Name;
   private TextView Phone;
   private TextView Partner;
   private TextView Password;
   private RadioButton rb;
+  private RadioButton st;
+  private RadioButton Pa;
   private RadioGroup rg;
   private String HashPassword;
 
@@ -41,6 +44,12 @@ public class SignUpActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
             while(child.hasNext()) {
+
+                if (Name.getText().toString().length() ==0 ) {
+                    Toast.makeText(getApplicationContext(), "이름을 입력해주세요", Toast.LENGTH_LONG).show();
+                    databaseReference.removeEventListener(this);
+                    return;
+                }
                 if (Phone.getText().toString().length() == 0) {
                     Toast.makeText(getApplicationContext(), "번호를 입력해주세요", Toast.LENGTH_LONG).show();
                     databaseReference.removeEventListener(this);
@@ -61,6 +70,12 @@ public class SignUpActivity extends AppCompatActivity {
                     databaseReference.removeEventListener(this);
                     return;
                 }
+                if (!Pa.isChecked() && !st.isChecked()) {
+                    Toast.makeText(getApplicationContext(), "학생인지 부모인지 체크해주세요", Toast.LENGTH_LONG).show();
+                    databaseReference.removeEventListener(this);
+                    return;
+                }
+
 
             }
             makeNewId();
@@ -72,12 +87,10 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
     };
-
-
     void makeNewId() {
             HashPassword = testMD5(Password.getText().toString());
-            final String value = ((RadioButton)findViewById(rg.getCheckedRadioButtonId() )).getText().toString();
-            User user = new User(Phone.getText().toString(),Partner.getText().toString(),HashPassword);
+            rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
+            User user = new User(Phone.getText().toString(),Name.getText().toString(),Partner.getText().toString(),HashPassword,rb.getText().toString());
             databaseReference.child(Phone.getText().toString()).setValue(user);
             /*
             databaseReference.child(Phone.getText().toString()).child("분류").setValue(value);
@@ -86,7 +99,6 @@ public class SignUpActivity extends AppCompatActivity {
             */
             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-              intent.putExtra("PhoneNumber",Phone.getText().toString());
               startActivity(intent);
 
     }
@@ -116,12 +128,15 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         btnSignup = findViewById(R.id.SignUpButton);
         btnSignup = (Button)findViewById(R.id.SignUpButton);
+        Name = (TextView)findViewById(R.id.Name);
         Phone = (TextView)findViewById(R.id.PhoneID);
         Partner = (TextView)findViewById(R.id.PartnerID);
         Password = (TextView)findViewById(R.id.PW1);
-
         rg = (RadioGroup) findViewById(R.id.choice);
-        rb = (RadioButton)findViewById(rg.getCheckedRadioButtonId());
+        st = (RadioButton) findViewById(R.id.stuent);
+        Pa = (RadioButton) findViewById(R.id.parent);
+
+
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
