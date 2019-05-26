@@ -56,13 +56,18 @@
             android:text="로그인" />
     </LinearLayout>
 
-    <ImageButton
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="잠금 on/off" />
+
+    <Button
         android:id="@+id/FirebaseButton"
         android:layout_width="260dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        app:srcCompat="@color/colorAccent"
-        android:text="파이어베이스 로그인" />
+        android:text="비번설정" />
 
 
 </LinearLayout>
